@@ -1,0 +1,55 @@
+#bvg_admin_msg{
+
+    border: 2px solid #c00;
+
+    font-weight: bold;
+    color: #c00;
+}
+.admin_block{
+    display: none;
+}
+.admin_block_label{
+    clear: both;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+label{
+    clear: left;
+    display: block;
+    float: left;
+    padding: 5px;
+    width: 80px;
+    margin-top: 4px;
+    margin-right: 8px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    color: #c00;
+}
+input{
+    float: left;
+    margin-top: 4px;
+}
+
+ul.table{
+    width: 100%;
+}
+ul.table span{
+    display: inline-block;
+}
+.table_header span{
+    width: 60px;
+    padding: 3px;
+    border-bottom: 1px solid #777;
+    font-weight: bold;
+}
+.table_row span{
+    width: 60px;
+    padding: 3px;
+    font-weight: normal;
+}
+.table span.pl_name{
+    width: 150px;
+}
