@@ -53,3 +53,23 @@ ul.table span{
 .table span.pl_name{
     width: 150px;
 }
+
+input.set_score, input.match_winner{
+    float: none;
+    width: 30px;
+}
+input.match_winner{
+    width: 60px;
+}
+input.player_name{
+    background-color: #fffa90;
+    color: #000;
+}
+input.player_name.loser{
+    background-color: #c00;
+    color: #fff;
+}
+input.player_name.winner{
+    background-color: #adff2f;
+    color: #000;
+}
