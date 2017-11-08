@@ -10,26 +10,43 @@ if ( !defined( 'ABSPATH' ) ) die();
 global $wpdb;
 $bvg_admin_msg = '';
 
+
 /* Actions */
 if( isset($_POST['form_action']) ){
     include plugin_dir_path(__FILE__). 'action/'.$_POST['form_action'].'.php';
 }
+//echo 'XXX'.$_SESSION['round'];
 if( !isset( $_SESSION['round'] ) ){
     $_SESSION['round'] = 1;
+    //echo 'Hmmmmm';
 }
 
 
 /* Msg */
 if( !empty( trim( $bvg_admin_msg ) ) ){
     echo '<div id="bvg_admin_msg">'.$bvg_admin_msg.'</div>';
-
+/*
     echo '<div><pre>';
     var_dump( $_POST );
     echo '</pre></div>';
+*/
 }
 
 /* Forms */
 echo '<h1>Administration !!!</h1>';
+
+$query = "SELECT
+*
+
+FROM
+".$wpdb->prefix."bvg_tournaments
+
+WHERE
+id = 1
+";
+$tournaments = $wpdb->get_results( $query  );
+$tournament_name = $tournaments[0]-> name;
+echo '<h3>'.$tournament_name .' ( Round: '.$_SESSION['round'].')</h3>';
 
 
 /* Add player */
@@ -83,7 +100,7 @@ $players = $wpdb->get_results( $query, OBJECT_K  );
 echo '<div class="admin_block_label">Tabelle</div>';
 echo '<div class="admin_block" id="block_table">';
 echo '<form method="post">';
-echo '<input type="hidden" name="form_action" value="table_view" />';
+echo '<input type="hidden" name="form_action" value="next_round" />';
 
 echo '<ul class="table">';
 echo '<li class="table_header">';

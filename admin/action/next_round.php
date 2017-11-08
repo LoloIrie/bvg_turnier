@@ -6,7 +6,7 @@
  * Time: 15:32
  */
 
-
+/*
 $data = array(
     'firstname' => $_POST['firstname'],
     'lastname' => $_POST['lastname']
@@ -19,6 +19,7 @@ $data = array(
     'players_id' => $wpdb->insert_id
 );
 $wpdb->insert( $wpdb->prefix . 'bvg_players_tournament', $data );
+*/
 
-
-$bvg_admin_msg .= 'Neuer Spieler gespeichert...';
+$_SESSION['round']++;
+$bvg_admin_msg .= 'Neuer Round (( '.$_SESSION['round'].' )) !!!';

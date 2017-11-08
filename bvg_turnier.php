@@ -10,6 +10,13 @@ Author URI: http://etalkers.org
 
 if ( !defined( 'ABSPATH' ) ) die();
 
+add_action('init', 'myStartSession', 1);
+function myStartSession() {
+    if(!session_id()) {
+        session_start();
+    }
+}
+
 class Bvg_turnier
 {
     function __construct(){
