@@ -16,9 +16,12 @@ if( isset($_POST['form_action']) ){
     include plugin_dir_path(__FILE__). 'action/'.$_POST['form_action'].'.php';
 }
 //echo 'XXX'.$_SESSION['round'];
+if( !isset( $_SESSION['t_id'] ) ){
+    $_SESSION['t_id'] = 1;
+    $_SESSION['t_name'] = 'BVG Turnier';
+}
 if( !isset( $_SESSION['round'] ) ){
     $_SESSION['round'] = 1;
-    //echo 'Hmmmmm';
 }
 
 
@@ -35,44 +38,31 @@ if( !empty( trim( $bvg_admin_msg ) ) ){
 /* Forms */
 echo '<h1>Administration !!!</h1>';
 
+/* Get all tournaments */
 $query = "SELECT
 *
 
 FROM
 ".$wpdb->prefix."bvg_tournaments
-
-WHERE
-id = 1
 ";
 $tournaments = $wpdb->get_results( $query  );
-$tournament_name = $tournaments[0]-> name;
-echo '<h3>'.$tournament_name .' ( Round: '.$_SESSION['round'].')</h3>';
+
+/* Get all players not registred yet for this tournament */
+$query = "SELECT
+pl.id as player_id,
+pl.firstname as player_firstname,
+pl.lastname as player_lastname
+
+FROM
+".$wpdb->prefix."bvg_players as pl
+
+ORDER BY
+pl.lastname ASC, pl.firstname ASC
+";
+$all_players = $wpdb->get_results( $query, OBJECT_K  );
 
 
-/* Add player */
-echo '<div class="admin_block_label">Neuer Spieler hinfügen</div>';
-echo '<div class="admin_block" id="block_add_players">';
-    echo '<form method="post">';
-    echo '<input type="hidden" name="form_action" value="add_players" />';
-
-
-
-    echo '<label>Vorname: </label>';
-    echo '<input type="text" value="" placeholder="Vorname" name="firstname" />';
-    echo '<label>Nachname: </label>';
-    echo '<input type="text" value="" placeholder="Nachname" name="lastname" />';
-
-    echo '<input type="submit" value="Add players" />';
-
-
-    echo '</form>';
-echo '</div>';
-
-
-
-
-
-/* Table */
+/* Get all players for the current tournament */
 $query = "SELECT
 pl_t.id as id,
 pl.id as player_id,
@@ -88,12 +78,108 @@ ON
 pl.id = pl_t.players_id
 
 WHERE
-pl_t.tournament_id = 1
+pl_t.tournament_id = ".$_SESSION['t_id']."
 
 ORDER BY
 pl_t.points_major DESC, pl_t.sets DESC, pl_t.sets_against ASC, pl_t.points DESC, pl_t.points_against ASC, pl_t.player_level_init DESC
 ";
 $players = $wpdb->get_results( $query, OBJECT_K  );
+
+/*
+echo '<pre>';
+var_dump( $players );
+echo '<hr />';
+var_dump( $all_players );
+echo '</pre>';
+*/
+echo '<h3>'.$_SESSION['t_name'] .' ( Round: '.$_SESSION['round'].')</h3>';
+
+
+
+/* Tournament */
+echo '<div class="admin_block_label">Turnier Verwaltung</div>';
+echo '<div class="admin_block" id="block_tournament_select">';
+echo '<form method="post">';
+echo '<input type="hidden" name="form_action" value="tournament_select" />';
+echo '<input type="hidden" name="turnier_select_id" value="'.$_SESSION['t_id'].'" />';
+
+
+
+echo '<label>Turnier auswählen: </label>';
+echo '<select type="text" value="" name="turnier_select">';
+echo '<option value="0">Auswählen</option>';
+foreach( $tournaments as $tournament ){
+    echo '<option value="'.$tournament->id.'" '.( $tournament->id == $_SESSION['t_id'] ? 'selected="selected"' : '' ).'>'.$tournament->name.'</option>';
+    if( $tournament->id == $_SESSION['t_id'] ){
+        $_SESSION['t_name'] = $tournament-> name;
+    }
+}
+echo '</select>';
+echo '<input type="submit" value="Turnier auswählen" id="turnier_select_button" />';
+echo '<br />';
+echo '<br />';
+echo '<label>Neuer Turnier: </label>';
+echo '<input type="text" value="" placeholder="Turnier Name" name="turnier_name" />';
+echo '<br />';
+
+echo '<input type="submit" value="Turnier anlegen" />';
+
+
+echo '</form>';
+echo '</div>';
+
+
+
+
+/* Add player */
+echo '<div class="admin_block_label">Neuer Spieler hinfügen</div>';
+echo '<div class="admin_block" id="block_add_players">';
+
+    echo '<form method="post">';
+    echo '<input type="hidden" name="form_action" value="add_existing_players" />';
+
+    echo '<label>Spieler: </label>';
+    echo '<select type="text" value="" name="spieler_select">';
+    echo '<option value="0">Auswählen</option>';
+    foreach( $all_players as $k => $all_player ){
+        foreach( $players as $player ){
+            if( $player->players_id == $k ){
+                continue 2;
+            }
+        }
+
+        echo '<option value="'.$all_player->player_id.'" >'.$all_player->player_firstname.' '.$all_player->player_lastname.'</option>';
+    }
+    echo '</select>';
+
+    echo '<input type="submit" value="Spieler für das Turnier anlegen" />';
+
+    echo '</form>';
+
+    echo '<form method="post">';
+    echo '<input type="hidden" name="form_action" value="add_players" />';
+
+
+
+    echo '<label>Vorname: </label>';
+    echo '<input type="text" value="" placeholder="Vorname" name="firstname" />';
+    echo '<label>Nachname: </label>';
+    echo '<input type="text" value="" placeholder="Nachname" name="lastname" />';
+
+    echo '<input type="submit" value="Neuer Spieler anlegen" />';
+
+
+    echo '</form>';
+
+
+echo '</div>';
+
+
+
+
+
+/* Table */
+
 //echo '<pre>';
 //var_dump( $players );
 
@@ -293,6 +379,11 @@ echo '</div>';
         jFormId = '#form_match_' + jQuery().attr('data_m_id');
         jQuery( jMatchId ).val( jQuery( this ).attr( 'data' ) );
         jQuery( jFormId ).submit();
+    });
+
+    jQuery('#turnier_select_button').on( 'click', function(){
+        jQuery( '#turnier_name').val( '' );
+        jQuery( '#turnier_select_id' ).val( jQuery( '#turnier_select' ).val() );
     });
 
 </script>

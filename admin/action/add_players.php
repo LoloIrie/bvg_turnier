@@ -15,7 +15,7 @@ $wpdb->insert( $wpdb->prefix . 'bvg_players', $data );
 
 
 $data = array(
-    'tournament_id' => 1,
+    'tournament_id' => $_SESSION['t_id'],
     'players_id' => $wpdb->insert_id
 );
 $wpdb->insert( $wpdb->prefix . 'bvg_players_tournament', $data );
