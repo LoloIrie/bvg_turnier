@@ -73,3 +73,14 @@ input.player_name.winner{
     background-color: #adff2f;
     color: #000;
 }
+
+.radio_block label{
+    border: 0;
+    float: none;
+    display: inline;
+}
+.radio_block span {
+    float: left;
+    display: inline-block;
+    max-width: 250px;
+}

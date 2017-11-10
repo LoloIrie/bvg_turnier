@@ -26,6 +26,7 @@ LIMIT
 0,1";
     $tournaments = $wpdb->get_results( $query  );
     $new_t_name = $tournaments[0]->name;
+    $_SESSION['round'] = $tournaments[0]->round;
 }else{
     // CREATE NEW TOURNAMENT
     $parent_id = 0;
@@ -36,17 +37,23 @@ LIMIT
     $data = array(
         'parent_id' => $parent_id,
         'name' => $_POST['turnier_name'],
-        'round' => 1
+        'round' => 1,
+        'system' => 1,
+        'nb_sets' => 3,
+        'points_set' => 21,
+        'max_points_set' => 30
     );
     $wpdb->insert( $wpdb->prefix . 'bvg_tournaments', $data );
 
     $new_t_id = $wpdb->insert_id;
     $new_t_name = $_POST['turnier_name'];
+    $_SESSION['round'] = 1;
 }
 
+/*
 $wpdb->show_errors();
 $wpdb->print_error();
-
+*/
 $_SESSION['t_id'] = $new_t_id;
 $_SESSION['t_name'] = $new_t_name;
 $bvg_admin_msg .= 'Aktives Turnier: '.$_SESSION['t_name'].' !!!';

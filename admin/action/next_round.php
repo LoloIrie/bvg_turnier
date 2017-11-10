@@ -6,20 +6,14 @@
  * Time: 15:32
  */
 
-/*
-$data = array(
-    'firstname' => $_POST['firstname'],
-    'lastname' => $_POST['lastname']
-);
-$wpdb->insert( $wpdb->prefix . 'bvg_players', $data );
 
-
-$data = array(
-    'tournament_id' => 1,
-    'players_id' => $wpdb->insert_id
-);
-$wpdb->insert( $wpdb->prefix . 'bvg_players_tournament', $data );
-*/
 
 $_SESSION['round']++;
+
+$data = array(
+    'round' => $_SESSION['round']
+);
+$where = array( 'id' => $_SESSION['t_id'] );
+$wpdb->update( $wpdb->prefix . 'bvg_tournaments', $data, $where );
+
 $bvg_admin_msg .= 'Neuer Round (( '.$_SESSION['round'].' )) !!!';

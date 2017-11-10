@@ -6,11 +6,12 @@
  * Time: 15:32
  */
 
+$wpdb->show_errors();
+
 if( !is_numeric( $_POST['match_id'] ) ){
     $bvg_admin_msg .= 'Fehler: Match ID ist falsch...';
 }else{
     //$wpdb->show_errors();
-
     $winner = 0;
 
     $m_id = $_POST['match_id'];
@@ -57,9 +58,73 @@ if( !is_numeric( $_POST['match_id'] ) ){
         $s2++;
     }
 
-
-    if( is_numeric( $_POST['match_winner_'.$m_id] ) ){
+    if( is_numeric( $_POST['match_winner_'.$m_id] ) && $_POST['match_winner_'.$m_id] > 0 ){
         $winner = $_POST['match_winner_'.$m_id];
+    }else{
+        /* Try to set winner */
+        $bvg_admin_msg .= 'Try to set winner...<br />';
+        $nb_sets_completed = 0;
+        $nb_sets_pl1 = 0;
+        $nb_sets_pl2 = 0;
+
+        if( $pl1_set1 > ($_SESSION['t_points_set']-1) || $pl2_set1 > ($_SESSION['t_points_set']-1) ){
+            # First set
+            $nb_sets_completed++;
+            if( $pl1_set1 > $pl2_set1 ){
+                $nb_sets_pl1++;
+            }else{
+                $nb_sets_pl2++;
+            }
+        }
+        if( $pl1_set2 > ($_SESSION['t_points_set']-1) || $pl2_set2 > ($_SESSION['t_points_set']-1) ){
+            # First set
+            $nb_sets_completed++;
+            if( $pl1_set2 > $pl2_set2 ){
+                $nb_sets_pl1++;
+            }else{
+                $nb_sets_pl2++;
+            }
+        }
+        if( $pl1_set3 > ($_SESSION['t_points_set']-1) || $pl2_set3 > ($_SESSION['t_points_set']-1) ){
+            # First set
+            $nb_sets_completed++;
+            if( $pl1_set3 > $pl2_set3 ){
+                $nb_sets_pl1++;
+            }else{
+                $nb_sets_pl2++;
+            }
+        }
+        if( $pl1_set4 > ($_SESSION['t_points_set']-1) || $pl2_set4 > ($_SESSION['t_points_set']-1) ){
+            # First set
+            $nb_sets_completed++;
+            if( $pl1_set4 > $pl2_set4 ){
+                $nb_sets_pl1++;
+            }else{
+                $nb_sets_pl2++;
+            }
+        }
+        if( $pl1_set5 > ($_SESSION['t_points_set']-1) || $pl2_set5 > ($_SESSION['t_points_set']-1) ){
+            # First set
+            $nb_sets_completed++;
+            if( $pl1_set5 > $pl2_set5 ){
+                $nb_sets_pl1++;
+            }else{
+                $nb_sets_pl2++;
+            }
+        }
+
+        if( $nb_sets_completed >= $_SESSION['t_nb_sets'] ){
+            $winner = $pl1_id;
+            if( $nb_sets_pl2 > $nb_sets_pl1 ){
+                $winner = $pl2_id;
+            }
+        }
+    }
+
+    $bvg_admin_msg .= 'Winner: '.$winner.'<br />';
+
+    if( $winner > 0 ){
+
 
         /* Update tournament table */
         $p = ( $winner == $pl1_id ? 1 : 0 );

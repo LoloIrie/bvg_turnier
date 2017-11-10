@@ -21,9 +21,20 @@ if( !isset( $_SESSION['t_id'] ) ){
     $_SESSION['t_name'] = 'BVG Turnier';
 }
 if( !isset( $_SESSION['round'] ) ){
-    $_SESSION['round'] = 1;
+    $round = $wpdb->get_results( "SELECT round FROM ".$wpdb->prefix."bvg_tournaments WHERE id=".$_SESSION['t_id']." LIMIT 0,1" );
+    $_SESSION['round'] = $round[0]->round;
 }
 
+/* Get DB content */
+include plugin_dir_path(__FILE__). 'db_get_content.php';
+
+
+
+/* Generate matches if required */
+if( empty($matches) ){
+    //echo $query;
+    include plugin_dir_path(__FILE__). 'action/generate_matches.php';
+}
 
 /* Msg */
 if( !empty( trim( $bvg_admin_msg ) ) ){
@@ -35,55 +46,16 @@ if( !empty( trim( $bvg_admin_msg ) ) ){
 */
 }
 
+
+
+
+
+
+
 /* Forms */
 echo '<h1>Administration !!!</h1>';
 
-/* Get all tournaments */
-$query = "SELECT
-*
 
-FROM
-".$wpdb->prefix."bvg_tournaments
-";
-$tournaments = $wpdb->get_results( $query  );
-
-/* Get all players not registred yet for this tournament */
-$query = "SELECT
-pl.id as player_id,
-pl.firstname as player_firstname,
-pl.lastname as player_lastname
-
-FROM
-".$wpdb->prefix."bvg_players as pl
-
-ORDER BY
-pl.lastname ASC, pl.firstname ASC
-";
-$all_players = $wpdb->get_results( $query, OBJECT_K  );
-
-
-/* Get all players for the current tournament */
-$query = "SELECT
-pl_t.id as id,
-pl.id as player_id,
-pl.firstname as player_firstname,
-pl.lastname as player_lastname,
-pl_t.*
-
-FROM
-".$wpdb->prefix."bvg_players as pl
-JOIN
-".$wpdb->prefix."bvg_players_tournament as pl_t
-ON
-pl.id = pl_t.players_id
-
-WHERE
-pl_t.tournament_id = ".$_SESSION['t_id']."
-
-ORDER BY
-pl_t.points_major DESC, pl_t.sets DESC, pl_t.sets_against ASC, pl_t.points DESC, pl_t.points_against ASC, pl_t.player_level_init DESC
-";
-$players = $wpdb->get_results( $query, OBJECT_K  );
 
 /*
 echo '<pre>';
@@ -111,7 +83,12 @@ echo '<option value="0">Auswählen</option>';
 foreach( $tournaments as $tournament ){
     echo '<option value="'.$tournament->id.'" '.( $tournament->id == $_SESSION['t_id'] ? 'selected="selected"' : '' ).'>'.$tournament->name.'</option>';
     if( $tournament->id == $_SESSION['t_id'] ){
-        $_SESSION['t_name'] = $tournament-> name;
+        $_SESSION['t_name'] = $tournament->name;
+        $_SESSION['t_round'] = $tournament->round;
+        $_SESSION['t_system'] = $tournament->system;
+        $_SESSION['t_nb_sets'] = $tournament->nb_sets;
+        $_SESSION['t_points_set'] = $tournament->points_set;
+        $_SESSION['t_max_points_set'] = $tournament->max_points_set;
     }
 }
 echo '</select>';
@@ -126,6 +103,23 @@ echo '<input type="submit" value="Turnier anlegen" />';
 
 
 echo '</form>';
+
+
+echo '<hr />';
+echo '<form method="post">';
+echo '<input type="hidden" name="form_action" value="tournament_config" />';
+
+echo '<label>Turnier System: </label>';
+echo '<div class="radio_block">';
+echo '<span><input type="radio" id="turnier_system1" name="turnier_system" value="1" checked="checked" disabled="disabled" /> <label for="turnier_system1" class="radio">Schweizer System</label></span><br />';
+echo '<span><input type="radio" id="turnier_system2" name="turnier_system" value="2" disabled="disabled" /> <label for="turnier_system1" class="radio">Meisterschaft</label></span><br />';
+echo '<span><input type="radio" id="turnier_system3" name="turnier_system" value="3" disabled="disabled" /> <label for="turnier_system1" class="radio">KO System</label></span>';
+echo '</div>';
+
+echo '<input type="submit" value="Turnier anpassen" disabled="disabled" />';
+
+echo '</form>';
+
 echo '</div>';
 
 
@@ -268,27 +262,7 @@ echo '</div>';
 /* Matches */
 
 
-$query = "SELECT
-*
 
-FROM
-".$wpdb->prefix."bvg_matches
-
-WHERE
-tournament_id = 1
-AND
-round = ".$_SESSION['round']."
-
-ORDER BY
-id ASC
-";
-$matches = $wpdb->get_results( $query );
-
-/* Generate matches if required */
-if( empty($matches) ){
-    //echo $query;
-    include plugin_dir_path(__FILE__). 'action/generate_matches.php';
-}
 
 
 
@@ -297,58 +271,72 @@ echo '<div class="admin_block" id="block_spiele">';
 
 //var_dump( $players );
 foreach( $matches as $match ){
+    $pl1_set1 = 0;
+    $pl1_set2 = 0;
+    $pl1_set3 = 0;
+    $pl1_set4 = 0;
+    $pl1_set5 = 0;
+    $pl2_set1 = 0;
+    $pl2_set2 = 0;
+    $pl2_set3 = 0;
+    $pl2_set4 = 0;
+    $pl2_set5 = 0;
     if( !is_array( $match ) ){
         //var_dump($players[ $match->player1_id ]);
         $player1_name = $players[ $match->player1_id ]->player_firstname.' '.$players[ $match->player1_id ]->player_lastname;
         $player2_name = $players[ $match->player2_id ]->player_firstname.' '.$players[ $match->player2_id ]->player_lastname;
+        $m_id = $match->id;
         $pl1_id = $match->player1_id;
         $pl2_id = $match->player2_id;
         $winner = $match->winner;
+
+        $pl1_set1 = $match->pl1_set1;
+        $pl1_set2 = $match->pl1_set2;
+        $pl1_set3 = $match->pl1_set3;
+        $pl1_set4 = $match->pl1_set4;
+        $pl1_set5 = $match->pl1_set5;
+        $pl2_set1 = $match->pl2_set1;
+        $pl2_set2 = $match->pl2_set2;
+        $pl2_set3 = $match->pl2_set3;
+        $pl2_set4 = $match->pl2_set4;
+        $pl2_set5 = $match->pl2_set5;
     }else{
         $player1_name = $match['player1_name'];
         $player2_name = $match['player2_name'];
         $pl1_id = $match['player1_id'];
         $pl2_id = $match['player2_id'];
         $winner = $match['winner'];
+        $m_id = $match['id'];
     }
 
-    $pl1_set1 = $match->pl1_set1;
-    $pl1_set2 = $match->pl1_set2;
-    $pl1_set3 = $match->pl1_set3;
-    $pl1_set4 = $match->pl1_set4;
-    $pl1_set5 = $match->pl1_set5;
-    $pl2_set1 = $match->pl2_set1;
-    $pl2_set2 = $match->pl2_set2;
-    $pl2_set3 = $match->pl2_set3;
-    $pl2_set4 = $match->pl2_set4;
-    $pl2_set5 = $match->pl2_set5;
+
 
     //var_dump( $match );
-    echo '<form method="post" id="match_form_'.$match->id.'">';
+    echo '<form method="post" id="match_form_'.$m_id.'">';
     echo '<input type="hidden" name="form_action" value="game_result" />';
-    echo '<input type="hidden" name="match_id" value="'.$match->id.'" />';
+    echo '<input type="hidden" name="match_id" value="'.$m_id.'" />';
     echo '<input type="hidden" name="pl1_id" value="'.$pl1_id.'" />';
     echo '<input type="hidden" name="pl2_id" value="'.$pl2_id.'" />';
-    echo '<input type="hidden" id="match_winner_'.$match->id.'" name="match_winner_'.$match->id.'" value="" />';
+    echo '<input type="hidden" id="match_winner_'.$m_id.'" name="match_winner_'.$m_id.'" value="" />';
 
     echo '<div>';
-    echo '<input type="text" value="'.$player1_name.'" name="pl1_m'.$match->id.'_name" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
-    echo '<input type="text" value="'.$pl1_set1.'" name="pl1_m'.$match->id.'_set1" class="set_score" />';
-    echo '<input type="text" value="'.$pl1_set2.'" name="pl1_m'.$match->id.'_set2" class="set_score" />';
-    echo '<input type="text" value="'.$pl1_set3.'" name="pl1_m'.$match->id.'_set3" class="set_score" />';
-    echo '<input type="text" value="'.$pl1_set4.'" name="pl1_m'.$match->id.'_set4" class="set_score" />';
-    echo '<input type="text" value="'.$pl1_set5.'" name="pl1_m'.$match->id.'_set5" class="set_score" />';
-    echo '<input type="submit" value="Sieger" class="match_winner" data="'.$pl1_id.'" data_m_id="'.$match->id.'" />';
+    echo '<input type="text" value="'.$player1_name.'" name="pl1_m'.$m_id.'_name" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
+    echo '<input type="text" value="'.$pl1_set1.'" name="pl1_m'.$m_id.'_set1" class="set_score" />';
+    echo '<input type="text" value="'.$pl1_set2.'" name="pl1_m'.$m_id.'_set2" class="set_score" />';
+    echo '<input type="text" value="'.$pl1_set3.'" name="pl1_m'.$m_id.'_set3" class="set_score" />';
+    echo '<input type="text" value="'.$pl1_set4.'" name="pl1_m'.$m_id.'_set4" class="set_score" />';
+    echo '<input type="text" value="'.$pl1_set5.'" name="pl1_m'.$m_id.'_set5" class="set_score" />';
+    echo '<input type="submit" value="Sieger" class="match_winner" data="'.$pl1_id.'" data_m_id="'.$m_id.'" />';
     echo '</div>';
 
     echo '<div>';
-    echo '<input type="text" value="'.$player2_name.'" name="pl2_m'.$match->id.'_name" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
-    echo '<input type="text" value="'.$pl2_set1.'" name="pl2_m'.$match->id.'_set1" class="set_score" />';
-    echo '<input type="text" value="'.$pl2_set2.'" name="pl2_m'.$match->id.'_set2" class="set_score" />';
-    echo '<input type="text" value="'.$pl2_set3.'" name="pl2_m'.$match->id.'_set3" class="set_score" />';
-    echo '<input type="text" value="'.$pl2_set4.'" name="pl2_m'.$match->id.'_set4" class="set_score" />';
-    echo '<input type="text" value="'.$pl2_set5.'" name="pl2_m'.$match->id.'_set5" class="set_score" />';
-    echo '<input type="submit" value="Sieger" class="match_winner" data="'.$pl2_id.'" data_m_id="'.$match->id.'" />';
+    echo '<input type="text" value="'.$player2_name.'" name="pl2_m'.$m_id.'_name" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
+    echo '<input type="text" value="'.$pl2_set1.'" name="pl2_m'.$m_id.'_set1" class="set_score" />';
+    echo '<input type="text" value="'.$pl2_set2.'" name="pl2_m'.$m_id.'_set2" class="set_score" />';
+    echo '<input type="text" value="'.$pl2_set3.'" name="pl2_m'.$m_id.'_set3" class="set_score" />';
+    echo '<input type="text" value="'.$pl2_set4.'" name="pl2_m'.$m_id.'_set4" class="set_score" />';
+    echo '<input type="text" value="'.$pl2_set5.'" name="pl2_m'.$m_id.'_set5" class="set_score" />';
+    echo '<input type="submit" value="Sieger" class="match_winner" data="'.$pl2_id.'" data_m_id="'.$m_id.'" />';
     echo '</div>';
 
 

@@ -65,6 +65,7 @@ $sql = "CREATE TABLE $nom_table (
   parent_id int(11) NOT NULL,
   name varchar(150) NOT NULL,
   round int(11) NOT NULL,
+  system int(11) NOT NULL,
   PRIMARY KEY (id)
 );";
 dbDelta( $sql );

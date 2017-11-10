@@ -6,7 +6,7 @@
  * Time: 15:32
  */
 
-echo 'NEED TO GENERATE MATCHES !!!!';
+
 
 $nb_players = count( $players );
 $players_match = $players;
@@ -63,4 +63,4 @@ for( $i=0; $i<$nb_matches; $i++ ){
 
 
 
-$bvg_admin_msg .= 'Neue Matches angelegt...';
+$bvg_admin_msg .= '<br />Neue Matches angelegt...';
