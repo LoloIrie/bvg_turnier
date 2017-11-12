@@ -124,9 +124,12 @@ if( !is_numeric( $_POST['match_id'] ) ){
     $bvg_admin_msg .= 'Winner: '.$winner.'<br />';
 
     if( $winner > 0 ){
-
+        $pl1_level_current_change = 0;
+        $pl2_level_current_change = 0;
 
         /* Update tournament table */
+        $pl1_level_current_change = ( $winner == $pl1_id ? 1 : 0 );
+        $pl2_level_current_change = ( $winner == $pl2_id ? 1 : 0 );
         $p = ( $winner == $pl1_id ? 1 : 0 );
         $w = ( $winner == $pl1_id ? 1 : 0 );
         $d = 0;
@@ -140,6 +143,7 @@ if( !is_numeric( $_POST['match_id'] ) ){
             ".$wpdb->prefix . 'bvg_players_tournament'."
             
             SET
+            players_level_current=players_level_current+".$pl1_level_current_change.",
             played=played+1,
             victory=victory+%d,
             draw=draw+%d,
@@ -170,6 +174,7 @@ if( !is_numeric( $_POST['match_id'] ) ){
             ".$wpdb->prefix . 'bvg_players_tournament'."
             
             SET
+            players_level_current=players_level_current+".$pl2_level_current_change.",
             played=played+1,
             victory=victory+%d,
             draw=draw+%d,

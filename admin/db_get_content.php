@@ -15,11 +15,12 @@ FROM
 ";
 $tournaments = $wpdb->get_results( $query  );
 
-/* Get all players not registred yet for this tournament */
+/* Get all players */
 $query = "SELECT
 pl.id as player_id,
 pl.firstname as player_firstname,
-pl.lastname as player_lastname
+pl.lastname as player_lastname,
+pl.player_level as player_level
 
 FROM
 ".$wpdb->prefix."bvg_players as pl
@@ -51,6 +52,8 @@ pl_t.tournament_id = ".$_SESSION['t_id']."
 ORDER BY
 pl_t.points_major DESC, pl_t.sets DESC, pl_t.sets_against ASC, pl_t.points DESC, pl_t.points_against ASC, pl_t.player_level_init DESC
 ";
+//$wpdb->show_errors();
+//echo $query;
 $players = $wpdb->get_results( $query, OBJECT_K  );
 
 /* Get matches */

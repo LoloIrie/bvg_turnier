@@ -39,6 +39,7 @@ $sql = "CREATE TABLE $nom_table (
   id bigint(20) unsigned NOT NULL auto_increment,
   firstname varchar(150) NOT NULL,
   lastname varchar(150) NOT NULL,
+  player_level_init int(6) unsigned NOT NULL,
   PRIMARY KEY (id)
 );";
 dbDelta( $sql );
@@ -68,7 +69,7 @@ $sql = "CREATE TABLE $nom_table (
   name varchar(150) NOT NULL,
   round int(11) NOT NULL,
   system int(11) NOT NULL,
-  nb_points int(11) NOT NULL,
+  nb_sets int(11) NOT NULL,
   points_set int(11) NOT NULL,
   max_points_set int(11) NOT NULL,
   PRIMARY KEY (id)

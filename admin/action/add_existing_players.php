@@ -9,7 +9,8 @@
 if( is_numeric( $_POST['spieler_select'] ) ){
     $data = array(
         'tournament_id' => $_SESSION['t_id'],
-        'players_id' => $_POST['spieler_select']
+        'players_id' => $_POST['spieler_select'],
+        'player_level_init' => $_POST['schweizer_system_punkte']
     );
     $wpdb->insert( $wpdb->prefix . 'bvg_players_tournament', $data );
 

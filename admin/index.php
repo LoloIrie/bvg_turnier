@@ -18,6 +18,7 @@ if( isset($_POST['form_action']) ){
 //echo 'XXX'.$_SESSION['round'];
 if( !isset( $_SESSION['t_id'] ) ){
     $_SESSION['t_id'] = 1;
+    $_SESSION['t_system'] = 1;
     $_SESSION['t_name'] = 'BVG Turnier';
 }
 if( !isset( $_SESSION['round'] ) ){
@@ -131,9 +132,10 @@ echo '<div class="admin_block" id="block_add_players">';
 
     echo '<form method="post">';
     echo '<input type="hidden" name="form_action" value="add_existing_players" />';
+    echo '<input type="hidden" id="schweizer_system_punkte" name="schweizer_system_punkte" value="0" />';
 
     echo '<label>Spieler: </label>';
-    echo '<select type="text" value="" name="spieler_select">';
+    echo '<select type="text" value="" name="spieler_select" id="spieler_select">';
     echo '<option value="0">Auswählen</option>';
     foreach( $all_players as $k => $all_player ){
         foreach( $players as $player ){
@@ -142,7 +144,7 @@ echo '<div class="admin_block" id="block_add_players">';
             }
         }
 
-        echo '<option value="'.$all_player->player_id.'" >'.$all_player->player_firstname.' '.$all_player->player_lastname.'</option>';
+        echo '<option value="'.$all_player->player_id.'" data_level="'.$all_player->player_level.'">'.$all_player->player_firstname.' '.$all_player->player_lastname.'</option>';
     }
     echo '</select>';
 
@@ -159,6 +161,8 @@ echo '<div class="admin_block" id="block_add_players">';
     echo '<input type="text" value="" placeholder="Vorname" name="firstname" />';
     echo '<label>Nachname: </label>';
     echo '<input type="text" value="" placeholder="Nachname" name="lastname" />';
+    echo '<label>Werte (Schweizer System): </label>';
+    echo '<input type="text" value="" placeholder="Punkte" name="schweizer_system_punkte" />';
 
     echo '<input type="submit" value="Neuer Spieler anlegen" />';
 
@@ -262,12 +266,9 @@ echo '</div>';
 /* Matches */
 
 
-
-
-
-
 echo '<div class="admin_block_label">Spiele</div>';
 echo '<div class="admin_block" id="block_spiele">';
+echo '<form method="post">';
 
 //var_dump( $players );
 foreach( $matches as $match ){
@@ -350,6 +351,9 @@ foreach( $matches as $match ){
 }
 
 
+echo '<input name="generate_matchs_now" type="submit" value="Matches anlegen" />';
+
+echo '</form>';
 echo '</div>';
 
 
@@ -373,6 +377,12 @@ echo '</div>';
         jQuery( '#turnier_name').val( '' );
         jQuery( '#turnier_select_id' ).val( jQuery( '#turnier_select' ).val() );
     });
+
+    jQuery('#spieler_select').on( 'change', function(){
+        console.log( jQuery('#spieler_select option:selected').attr( 'data_level' ) );
+        jQuery( '#schweizer_system_punkte').val( jQuery('#spieler_select option:selected').attr( 'data_level' ) );
+    });
+
 
 </script>
 <?php
