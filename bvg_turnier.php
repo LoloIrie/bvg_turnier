@@ -38,6 +38,7 @@ class Bvg_turnier
     function bvg_turnier_admin(){
 
         wp_enqueue_style( 'bvg_turnier_admin_style', plugin_dir_url(__FILE__).'admin/bvg_turnier_admin.css');
+        wp_enqueue_script( 'bvg_turnier_admin', plugins_url( 'admin/bvg_turnier_admin.js', __FILE__ ) );
 
         if ( current_user_can('edit_pages') ) {
 

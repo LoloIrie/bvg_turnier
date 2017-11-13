@@ -10,7 +10,9 @@ $new_t_id = 1;
 $new_t_name = 'BVG Turnier 2027';
 
 if( empty( $_POST['turnier_name'] ) && is_numeric( $_POST['turnier_select'] ) ){
+
     // SELECT EXISTING TOURNAMENT
+
     $new_t_id = $_POST['turnier_select'];
 
     $query = "SELECT
@@ -29,10 +31,27 @@ LIMIT
     $new_t_system = $tournaments[0]->system;
     $_SESSION['round'] = $tournaments[0]->round;
 }else{
+
     // CREATE NEW TOURNAMENT
+
     $parent_id = 0;
     if( $_POST['turnier_select_id'] > 0 ){
         $parent_id = $_POST['turnier_select_id'];
+    }
+
+    $nb_sets = 2;
+    if( isset( $_POST['turnier_nb_sets'] ) && is_numeric( $_POST['turnier_nb_sets'] ) ){
+        $nb_sets = $_POST['turnier_nb_sets'];
+    }
+
+    $points_sets = 21;
+    if( isset( $_POST['turnier_points_set'] ) && is_numeric( $_POST['turnier_points_set'] ) ){
+        $points_sets = $_POST['turnier_points_set'];
+    }
+
+    $turnier_max_points_set = 30;
+    if( isset( $_POST['turnier_max_points_set'] ) && is_numeric( $_POST['turnier_max_points_set'] ) ){
+        $turnier_max_points_set = $_POST['turnier_max_points_set'];
     }
 
     $data = array(
@@ -40,9 +59,9 @@ LIMIT
         'name' => $_POST['turnier_name'],
         'round' => 1,
         'system' => 1,
-        'nb_sets' => 3,
-        'points_set' => 21,
-        'max_points_set' => 30
+        'nb_sets' => $nb_sets,
+        'points_set' => $points_sets,
+        'max_points_set' => $turnier_max_points_set
     );
     //$wpdb->show_errors();
     $wpdb->insert( $wpdb->prefix . 'bvg_tournaments', $data );

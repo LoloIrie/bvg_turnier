@@ -11,7 +11,7 @@ $wpdb->show_errors();
 if( !is_numeric( $_POST['match_id'] ) ){
     $bvg_admin_msg .= 'Fehler: Match ID ist falsch...';
 }else{
-    //$wpdb->show_errors();
+    $wpdb->show_errors();
     $winner = 0;
 
     $m_id = $_POST['match_id'];
@@ -113,6 +113,7 @@ if( !is_numeric( $_POST['match_id'] ) ){
             }
         }
 
+        //echo 'NB Sets: '.$_SESSION['t_nb_sets'];
         if( $nb_sets_completed >= $_SESSION['t_nb_sets'] ){
             $winner = $pl1_id;
             if( $nb_sets_pl2 > $nb_sets_pl1 ){
@@ -143,7 +144,7 @@ if( !is_numeric( $_POST['match_id'] ) ){
             ".$wpdb->prefix . 'bvg_players_tournament'."
             
             SET
-            players_level_current=players_level_current+".$pl1_level_current_change.",
+            player_level_current=player_level_current+".$pl1_level_current_change.",
             played=played+1,
             victory=victory+%d,
             draw=draw+%d,
@@ -174,7 +175,7 @@ if( !is_numeric( $_POST['match_id'] ) ){
             ".$wpdb->prefix . 'bvg_players_tournament'."
             
             SET
-            players_level_current=players_level_current+".$pl2_level_current_change.",
+            player_level_current=player_level_current+".$pl2_level_current_change.",
             played=played+1,
             victory=victory+%d,
             draw=draw+%d,

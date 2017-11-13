@@ -5,9 +5,10 @@
  * Date: 30.10.2017
  * Time: 15:32
  */
-$wpdb->show_errors();
+//$wpdb->show_errors();
 
 if( isset( $_POST['generate_matchs_now'] ) ){
+
     $nb_players = count( $players );
     $players_match = $players;
 
@@ -75,35 +76,31 @@ if( isset( $_POST['generate_matchs_now'] ) ){
                 $data = array(
                     'player1_id' => $players_match[ $k_pl1 ]->id,
                     'player2_id' => $players_match[ $k_pl2 ]->id,
-                    'tournament_id' => 1,
+                    'tournament_id' => $_SESSION['t_id'],
                     'round' => $_SESSION['round']
                 );
                 $wpdb->insert( $wpdb->prefix . 'bvg_matches', $data );
 
 
                 /* Add players opponents in DB */
-                $wpdb->query( $wpdb->prepare(
-                    "UPDATE
+                $wpdb->query( "UPDATE
                     ".$wpdb->prefix . 'bvg_players_tournament'."
 
                     SET
-                    opponents = concat( opponents, '-', '".$players_match[ $k_pl2 ]->id."' )
+                    opponents = concat( opponents, '".$players_match[ $k_pl2 ]->id."', '-' )
 
                     WHERE
                     id=".$players_match[ $k_pl1 ]->id
-                    )
                 );
 
-                $wpdb->query( $wpdb->prepare(
-                    "UPDATE
+                $wpdb->query( "UPDATE
                     ".$wpdb->prefix . 'bvg_players_tournament'."
 
                     SET
-                    opponents = concat( opponents, '-', '".$players_match[ $k_pl1 ]->id."' )
+                    opponents = concat( opponents, '".$players_match[ $k_pl1 ]->id."', '-' )
 
                     WHERE
                     id=".$players_match[ $k_pl2 ]->id
-                )
                 );
 
                 //echo '<pre>';
@@ -140,34 +137,30 @@ if( isset( $_POST['generate_matchs_now'] ) ){
                 $data = array(
                     'player1_id' => $players_match[$k_pl1]->id,
                     'player2_id' => $players_match[$k_pl2]->id,
-                    'tournament_id' => 1,
+                    'tournament_id' => $_SESSION['t_id'],
                     'round' => $_SESSION['round']
                 );
                 $wpdb->insert($wpdb->prefix . 'bvg_matches', $data);
 
                 /* Add players opponents in DB */
-                $wpdb->query( $wpdb->prepare(
-                    "UPDATE
+                $wpdb->query( "UPDATE
                     ".$wpdb->prefix . 'bvg_players_tournament'."
 
                     SET
-                    opponents = concat( opponents, '-', '".$players_match[ $k_pl2 ]->id."' )
+                    opponents = concat( opponents, '".$players_match[ $k_pl2 ]->id."', '-' )
 
                     WHERE
                     id=".$players_match[ $k_pl1 ]->id
-                )
                 );
 
-                $wpdb->query( $wpdb->prepare(
-                    "UPDATE
+                $wpdb->query( "UPDATE
                     ".$wpdb->prefix . 'bvg_players_tournament'."
 
                     SET
-                    opponents = concat( opponents, '-', '".$players_match[ $k_pl1 ]->id."' )
+                    opponents = concat( opponents, '".$players_match[ $k_pl1 ]->id."', '-' )
 
                     WHERE
                     id=".$players_match[ $k_pl2 ]->id
-                )
                 );
             }
         }

@@ -64,7 +64,7 @@ FROM
 ".$wpdb->prefix."bvg_matches
 
 WHERE
-tournament_id = 1
+tournament_id = ".$_SESSION['t_id']."
 AND
 round = ".$_SESSION['round']."
 

@@ -50,6 +50,8 @@ $sql = "CREATE TABLE $nom_table (
   tournament_id bigint(20) unsigned NOT NULL,
   players_id bigint(20) unsigned NOT NULL,
   played int(3) unsigned NOT NULL,
+  player_level_init int(3) unsigned NOT NULL,
+  player_level_current int(3) unsigned NOT NULL,
   victory int(3) unsigned NOT NULL,
   draw int(3) unsigned NOT NULL,
   loss int(3) unsigned NOT NULL,
@@ -58,6 +60,7 @@ $sql = "CREATE TABLE $nom_table (
   sets_against int(3) unsigned NOT NULL,
   points int(6) unsigned NOT NULL,
   points_against int(6) unsigned NOT NULL,
+  opponents varchar(250) NOT NULL,
   PRIMARY KEY (id)
 );";
 dbDelta( $sql );
