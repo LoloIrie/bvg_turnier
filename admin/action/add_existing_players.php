@@ -11,7 +11,7 @@ echo '<pre>';
 var_dump( $all_players );
 echo '</pre>';
 */
-$wpdb->show_errors();
+//$wpdb->show_errors();
 if( isset( $_POST['alle_spieler'] ) ){
 
     $query = "SELECT

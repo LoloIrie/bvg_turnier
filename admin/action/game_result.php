@@ -6,12 +6,11 @@
  * Time: 15:32
  */
 
-$wpdb->show_errors();
+//$wpdb->show_errors();
 
 if( !is_numeric( $_POST['match_id'] ) ){
     $bvg_admin_msg .= 'Fehler: Match ID ist falsch...';
 }else{
-    $wpdb->show_errors();
     $winner = 0;
 
     $m_id = $_POST['match_id'];
