@@ -7,8 +7,12 @@ Author: Laurent Dorier
 Version: 1.0
 Author URI: http://etalkers.org
 */
-
+define( 'BVG_TURNIER_DEBUG', true );
 if ( !defined( 'ABSPATH' ) ) die();
+
+if( BVG_TURNIER_DEBUG ){
+    $wpdb->show_errors();
+}
 
 add_action('init', 'myStartSession', 1);
 function myStartSession() {
