@@ -111,9 +111,9 @@ if( isset( $_POST['generate_matchs_now'] ) ){
                 return $b->player_level_current - $a->player_level_current;
             });
 
-            for ($i = 0; $i < $nb_matches; $i++) {
+            for ($i = 0; $i < $nb_matches; $i+2) {
                 $k_pl1 = $i;
-                $k_pl2 = $i + $nb_matches;
+                $k_pl2 = $i + 1;
                 $matches[] = array(
                     'player1_id' => $players_match[$k_pl1]->id,
                     'player2_id' => $players_match[$k_pl2]->id,
