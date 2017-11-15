@@ -26,6 +26,7 @@ foreach( $matches as $match ){
     $pl2_set3 = 0;
     $pl2_set4 = 0;
     $pl2_set5 = 0;
+
     if( !is_array( $match ) ){
         //var_dump($players[ $match->player1_id ]);
         $player1_name = $players[ $match->player1_id ]->player_firstname.' '.$players[ $match->player1_id ]->player_lastname;
@@ -62,6 +63,18 @@ foreach( $matches as $match ){
         $m_id = $match['id'];
     }
 
+    if( !isset( $players[ $match->player1_id ] ) && $match->player1_id > 0 ){
+        $player1_name = 'Inaktiv';
+    }
+    if( !isset( $players[ $match->player2_id ] ) && $match->player2_id > 0 ){
+        $player2_name = 'Inaktiv';
+    }
+    if( !isset( $players[ $match->player1_id_bis ] ) && $match->player1_id_bis > 0 ){
+        $player1_name_bis = 'Inaktiv';
+    }
+    if( !isset( $players[ $match->player2_id_bis ] ) && $match->player2_id_bis > 0 ){
+        $player2_name_bis = 'Inaktiv';
+    }
 
 
     //var_dump( $match );
@@ -77,8 +90,11 @@ foreach( $matches as $match ){
     $html .= '<div>';
 
     $html .= '<select name="pl1_m'.$m_id.'_name" id="pl1_m'.$m_id.'_name" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
+    if( $player1_name == 'Inaktiv' ){
+        $html .= '<option value="0" selected="selected">'.$player1_name.'</option>';
+    }
     foreach( $players as $k => $player ){
-        $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl1_id ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
+        $html .= '<option value="'.$player->id.'" '.( $k == $pl1_id ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
     }
     $html .= '</select>';
 
@@ -87,8 +103,11 @@ foreach( $matches as $match ){
         //$html .= '<input type="text" value="'.$player1_name_bis.'" name="pl1_m'.$m_id.'_name_bis" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
 
         $html .= '<select name="pl1_m'.$m_id.'_name_bis" id="pl1_m'.$m_id.'_name_bis" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
+        if( $player1_name_bis == 'Inaktiv' ){
+            $html .= '<option value="0" selected="selected">'.$player1_name_bis.'</option>';
+        }
         foreach( $players as $k => $player ){
-            $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl1_id_bis ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
+            $html .= '<option value="'.$player->id.'" '.( $k == $pl1_id_bis ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
         }
         $html .= '</select>';
     }
@@ -106,6 +125,9 @@ foreach( $matches as $match ){
     $html .= '<div>';
 
     $html .= '<select name="pl2_m'.$m_id.'_name" id="pl2_m'.$m_id.'_name" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
+    if( $player2_name == 'Inaktiv' ){
+        $html .= '<option value="0" selected="selected">'.$player2_name.'</option>';
+    }
     foreach( $players as $k => $player ){
         $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl2_id ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
     }
@@ -116,6 +138,9 @@ foreach( $matches as $match ){
         //$html .= '<input type="text" value="'.$player2_name_bis.'" name="pl2_m'.$m_id.'_name_bis" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
 
         $html .= '<select name="pl2_m'.$m_id.'_name_bis" id="pl2_m'.$m_id.'_name_bis"  class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
+        if( $player2_name_bis == 'Inaktiv' ){
+            $html .= '<option value="0" selected="selected">'.$player2_name_bis.'</option>';
+        }
         foreach( $players as $k => $player ){
             $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl2_id_bis ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
         }

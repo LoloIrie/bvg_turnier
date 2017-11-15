@@ -12,7 +12,97 @@ var_dump( $all_players );
 echo '</pre>';
 */
 //$wpdb->show_errors();
-if( isset( $_POST['alle_spieler'] ) ){
+if( isset( $_POST['sieler_turnier_remove'] ) ){
+
+
+    $query = "DELETE FROM
+    ".$wpdb->prefix."bvg_matches
+
+    WHERE
+    tournament_id=".$_SESSION['t_id'];
+    $wpdb->query( $query );
+
+    $query = "DELETE FROM
+    ".$wpdb->prefix."bvg_players_tournament
+
+    WHERE
+    tournament_id=".$_SESSION['t_id'];
+    $wpdb->query( $query );
+
+
+    $bvg_admin_msg .= 'Alle Spieler für das Turnier gelöscht...';
+
+}else if( isset( $_POST['sieler_inaktiv'] ) ){
+
+    if( is_numeric( $_POST['spieler_select'] ) ){
+        $query = "UPDATE
+        ".$wpdb->prefix."bvg_players
+
+        SET
+        status=2
+
+        WHERE
+        id=".$_POST['spieler_select'];
+        $wpdb->query( $query );
+
+        // Get player ID for this tournament if existing
+        /* Get all players for the current tournament */
+        $query = "SELECT
+        pl_t.id
+
+        FROM
+        ".$wpdb->prefix."bvg_players_tournament as pl_t
+
+
+        WHERE
+        players_id=".$_POST['spieler_select'];
+        $player_tournaments = $wpdb->get_results( $query, OBJECT_K  );
+        foreach( $player_tournaments as $pl_t ){
+            $pl_t_ids[] = $pl_t->id;
+        }
+        $pl_t_ids_sql = implode( $pl_t_ids, ',' );
+        //var_dump( $pl_t_ids_sql );
+
+        $query = $query = "UPDATE
+        ".$wpdb->prefix."bvg_matches
+
+        SET
+        winner=player2_id
+
+        WHERE
+        winner=0
+        AND
+        (
+            player1_id IN (".$pl_t_ids_sql.")
+            OR
+            player1_id_bis IN (".$pl_t_ids_sql.")
+        )";
+        //echo $query;
+        $all_players = $wpdb->query( $query );
+
+        $query = $query = "UPDATE
+        ".$wpdb->prefix."bvg_matches
+
+        SET
+        winner=player1_id
+
+        WHERE
+        winner=0
+        AND
+        (
+            player2_id IN (".$pl_t_ids_sql.")
+            OR
+            player2_id_bis IN (".$pl_t_ids_sql.")
+        )";
+        $all_players = $wpdb->query( $query );
+
+
+    }
+
+
+    $bvg_admin_msg .= 'Spieler als inaktiv für alle Turniere gesetzt, seine noch offene Spiele sind denn als verloren markiert...';
+
+}else if( isset( $_POST['alle_spieler'] ) ){
 
     $query = "SELECT
     pl.id as player_id,

@@ -9,7 +9,7 @@
 //var_dump( $all_players );
 
 /* Players */
-$html .= '<div class="admin_block_label">Neuer Spieler hinfügen</div>';
+$html .= '<div class="admin_block_label">Spieler</div>';
 $html .= '<div class="admin_block" id="block_add_players">';
 
 $html .= '<form method="post">';
@@ -32,6 +32,8 @@ $html .= '</select>';
 
 $html .= '<input type="submit" value="Spieler für das Turnier anlegen" />';
 $html .= '<input type="submit" value="ALLE Spieler für das Turnier anlegen" id="alle_spieler" name="alle_spieler" />';
+$html .= '<input type="submit" value="Alle Spieler für das Turnier löschen" id="sieler_turnier_remove" name="sieler_turnier_remove" />';
+$html .= '<input type="submit" value="Spieler inaktiv setzen" id="sieler_löschen" name="sieler_inaktiv" />';
 
 $html .= '</form>';
 

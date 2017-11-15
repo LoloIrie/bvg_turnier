@@ -25,6 +25,7 @@ function get_free_opponent( $players_match, $k_pl1, $opponents ){
 if( isset( $_POST['generate_matchs_now'] ) ){
 
     $nb_players = count( $players );
+    //echo 'NB Players: '.$nb_players.'<br />';;
     $players_match = $players;
 
     /*
@@ -54,9 +55,9 @@ if( isset( $_POST['generate_matchs_now'] ) ){
 
     $players_match_backup = $players_match;
 
-    $nb_matches = floor( $nb_players / 2 );
+    //echo 'NB Matches: '.$nb_matches.'<br />';
     if( $_SESSION['t_system'] == 1 ){
-
+        $nb_matches = floor( $nb_players / 2 );
         /* Schweizer system */
 //echo __LINE__;
         if( $_SESSION['round'] < 1 ){
@@ -251,15 +252,15 @@ if( isset( $_POST['generate_matchs_now'] ) ){
     }
     else if( $_SESSION['t_system'] == 4 ){
         /* Schleiferlturnier */
-        $nb_matches = floor( $nb_matches / 2);
+        $nb_matches = floor( $nb_players / 4);
         shuffle( $players_match );
-
+        //echo 'NB Matches: '.$nb_matches.'<br />';
         /* Set teams */
         for( $i = 0; $i<$nb_matches; $i++ ){
-            $k_pl1 = $i;
-            $k_pl1_bis = $i + 1;
-            $k_pl2 = $i + 2;
-            $k_pl2_bis = $i + 3;
+            $k_pl1 = 0;
+            $k_pl1_bis = 1;
+            $k_pl2 = 2;
+            $k_pl2_bis = 3;
 
             /* Create matches in DB */
             $data = array(

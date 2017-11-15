@@ -20,10 +20,14 @@ $query = "SELECT
 pl.id as player_id,
 pl.firstname as player_firstname,
 pl.lastname as player_lastname,
-pl.player_level as player_level
+pl.player_level as player_level,
+pl.status as status
 
 FROM
 ".$wpdb->prefix."bvg_players as pl
+
+WHERE
+pl.status=1
 
 ORDER BY
 pl.lastname ASC, pl.firstname ASC
@@ -48,6 +52,8 @@ pl.id = pl_t.players_id
 
 WHERE
 pl_t.tournament_id = ".$_SESSION['t_id']."
+AND
+pl.status=1
 
 ORDER BY
 pl_t.points_major DESC, pl_t.sets DESC, pl_t.sets_against ASC, pl_t.points DESC, pl_t.points_against ASC, pl_t.player_level_init DESC
