@@ -16,6 +16,8 @@ $sql = "CREATE TABLE $nom_table (
   id bigint(20) NOT NULL,
   player1_id bigint(20) NOT NULL,
   player2_id bigint(20) NOT NULL,
+  player1s_id_bis bigint(20) NOT NULL,
+  player2_id_bis bigint(20) NOT NULL,
   tournament_id bigint(20) NOT NULL,
   round int(11) NOT NULL,
   winner int(11) NOT NULL,

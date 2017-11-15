@@ -21,8 +21,8 @@ if( !empty( trim( $bvg_admin_msg ) ) ){
 $html .= '<h1>Administration !!!</h1>';
 
 /* Title */
-$html .= '<h3>'.$_SESSION['t_name'] .' ( Round: '.$_SESSION['round'].')</h3>';
-
+$html .= '<h3>'.$_SESSION['t_name'].' (ID:'.$_SESSION['current_tournament']['id'].')' .' ( Round: '.$_SESSION['round'].')</h3>';
+$html .= '<h4>Gewinnsätze: '.$_SESSION['current_tournament']['nb_sets'].' Punkte pro Satz: '.$_SESSION['current_tournament']['points_set'].' Max. Punkte pro Satz: '.$_SESSION['current_tournament']['max_points_set'].'</h4>';
 
 
 

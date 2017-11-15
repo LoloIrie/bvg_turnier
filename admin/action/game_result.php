@@ -17,6 +17,8 @@ if( !is_numeric( $_POST['match_id'] ) ){
 
     $pl1_id = $_POST['pl1_id'];
     $pl2_id = $_POST['pl2_id'];
+    $pl1_id_bis = $_POST['pl1_id_bis'];
+    $pl2_id_bis = $_POST['pl2_id_bis'];
 
     $pl1_set1 = $_POST['pl1_m'.$m_id.'_set1'];
     $pl2_set1 = $_POST['pl2_m'.$m_id.'_set1'];
@@ -161,6 +163,32 @@ if( !is_numeric( $_POST['match_id'] ) ){
             )
         );
 
+        if( $_SESSION['t_system'] == 4 ){
+            // Schleiferlturnier => Partner
+            $wpdb->query( $wpdb->prepare(
+                "UPDATE
+                ".$wpdb->prefix . 'bvg_players_tournament'."
+                
+                SET
+                player_level_current=player_level_current+".$pl1_level_current_change.",
+                played=played+1,
+                victory=victory+%d,
+                draw=draw+%d,
+                loss=loss+%d,
+                points_major=points_major+%d,
+                sets=sets+%d,
+                sets_against=sets_against+%d,
+                points=points+%d,
+                points_against=points_against+%d
+                
+                WHERE
+                id=".$pl1_id_bis,
+
+                    $w, $d, $l, $p, $s, $s_opp, $pt, $pt_opp
+                )
+            );
+        }
+
         $p = ( $winner == $pl2_id ? 1 : 0 );
         $w = ( $winner == $pl2_id ? 1 : 0 );
         $d = 0;
@@ -189,8 +217,34 @@ if( !is_numeric( $_POST['match_id'] ) ){
             id=".$pl2_id,
 
             $w, $d, $l, $p, $s, $s_opp, $pt, $pt_opp
-        )
+            )
         );
+
+        if( $_SESSION['t_system'] == 4 ){
+            // Schleiferlturnier => Partner
+            $wpdb->query( $wpdb->prepare(
+                "UPDATE
+                ".$wpdb->prefix . 'bvg_players_tournament'."
+                
+                SET
+                player_level_current=player_level_current+".$pl2_level_current_change.",
+                played=played+1,
+                victory=victory+%d,
+                draw=draw+%d,
+                loss=loss+%d,
+                points_major=points_major+%d,
+                sets=sets+%d,
+                sets_against=sets_against+%d,
+                points=points+%d,
+                points_against=points_against+%d
+                
+                WHERE
+                id=".$pl2_id_bis,
+
+                $w, $d, $l, $p, $s, $s_opp, $pt, $pt_opp
+                )
+            );
+        }
     }
 
     //$wpdb->print_error();

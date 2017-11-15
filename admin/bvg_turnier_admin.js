@@ -21,3 +21,10 @@ jQuery('#spieler_select').on( 'change', function(){
     console.log( jQuery('#spieler_select option:selected').attr( 'data_level' ) );
     jQuery( '#schweizer_system_punkte').val( jQuery('#spieler_select option:selected').attr( 'data_level' ) );
 });
+
+jQuery( 'select.player_name' ).on('change', function() {
+        if (confirm('Wollen Sie wirklich die Spieleinstellung ändern ? ')) {
+            alert('Spiel geändert !');
+        }
+    }
+);

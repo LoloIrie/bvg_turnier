@@ -30,9 +30,13 @@ foreach( $matches as $match ){
         //var_dump($players[ $match->player1_id ]);
         $player1_name = $players[ $match->player1_id ]->player_firstname.' '.$players[ $match->player1_id ]->player_lastname;
         $player2_name = $players[ $match->player2_id ]->player_firstname.' '.$players[ $match->player2_id ]->player_lastname;
+        $player1_name_bis = $players[ $match->player1_id_bis ]->player_firstname.' '.$players[ $match->player1_id_bis ]->player_lastname;
+        $player2_name_bis = $players[ $match->player2_id_bis ]->player_firstname.' '.$players[ $match->player2_id_bis ]->player_lastname;
         $m_id = $match->id;
         $pl1_id = $match->player1_id;
         $pl2_id = $match->player2_id;
+        $pl1_id_bis = $match->player1_id_bis;
+        $pl2_id_bis = $match->player2_id_bis;
         $winner = $match->winner;
 
         $pl1_set1 = $match->pl1_set1;
@@ -50,6 +54,10 @@ foreach( $matches as $match ){
         $player2_name = $match['player2_name'];
         $pl1_id = $match['player1_id'];
         $pl2_id = $match['player2_id'];
+        $player1_name_bis = $match['player1_name_bis'];
+        $player2_name_bis = $match['player2_name_bis'];
+        $pl1_id_bis = $match['player1_id_bis'];
+        $pl2_id_bis = $match['player2_id_bis'];
         $winner = $match['winner'];
         $m_id = $match['id'];
     }
@@ -62,25 +70,62 @@ foreach( $matches as $match ){
     $html .= '<input type="hidden" name="match_id" value="'.$m_id.'" />';
     $html .= '<input type="hidden" name="pl1_id" value="'.$pl1_id.'" />';
     $html .= '<input type="hidden" name="pl2_id" value="'.$pl2_id.'" />';
+    $html .= '<input type="hidden" name="pl1_id_bis" value="'.$pl1_id_bis.'" />';
+    $html .= '<input type="hidden" name="pl2_id_bis" value="'.$pl2_id_bis.'" />';
     $html .= '<input type="hidden" id="match_winner_'.$m_id.'" name="match_winner_'.$m_id.'" value="" />';
 
     $html .= '<div>';
-    $html .= '<input type="text" value="'.$player1_name.'" name="pl1_m'.$m_id.'_name" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
-    $html .= '<input type="text" value="'.$pl1_set1.'" name="pl1_m'.$m_id.'_set1" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl1_set2.'" name="pl1_m'.$m_id.'_set2" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl1_set3.'" name="pl1_m'.$m_id.'_set3" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl1_set4.'" name="pl1_m'.$m_id.'_set4" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl1_set5.'" name="pl1_m'.$m_id.'_set5" class="set_score" />';
+
+    $html .= '<select name="pl1_m'.$m_id.'_name" id="pl1_m'.$m_id.'_name" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
+    foreach( $players as $k => $player ){
+        $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl1_id ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
+    }
+    $html .= '</select>';
+
+    //$html .= '<input type="text" value="'.$player1_name.'" name="pl1_m'.$m_id.'_name" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
+    if( !empty( trim( $player1_name_bis ) ) ){
+        //$html .= '<input type="text" value="'.$player1_name_bis.'" name="pl1_m'.$m_id.'_name_bis" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
+
+        $html .= '<select name="pl1_m'.$m_id.'_name_bis" id="pl1_m'.$m_id.'_name_bis" class="player_name '.( $winner == $pl1_id ? 'winner' : '' ).' '.( $winner == $pl2_id ? 'loser' : '' ).'" />';
+        foreach( $players as $k => $player ){
+            $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl1_id_bis ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
+        }
+        $html .= '</select>';
+    }
+    $html .= '<input type="number" value="'.$pl1_set1.'" name="pl1_m'.$m_id.'_set1" class="set_score" min="0" max="'.$_SESSION['current_tournament']['max_points_set'].'" />';
+    $html .= '<input type="number" value="'.$pl1_set2.'" name="pl1_m'.$m_id.'_set2" class="set_score" min="0" max="'.$_SESSION['current_tournament']['max_points_set'].'" />';
+    $html .= '<input type="number" value="'.$pl1_set3.'" name="pl1_m'.$m_id.'_set3" class="set_score" min="0" max="'.$_SESSION['current_tournament']['max_points_set'].'" />';
+    $html .= '<input type="number" value="'.$pl1_set4.'" name="pl1_m'.$m_id.'_set4" class="set_score" '.( $_SESSION['current_tournament']['turnier_nb_sets'] < 3 ? 'disabled="disabled"' : '' ).'/>';
+    $html .= '<input type="number" value="'.$pl1_set5.'" name="pl1_m'.$m_id.'_set5" class="set_score" '.( $_SESSION['current_tournament']['turnier_nb_sets'] < 3 ? 'disabled="disabled"' : '' ).'/>';
     $html .= '<input type="submit" value="Sieger" class="match_winner" data="'.$pl1_id.'" data_m_id="'.$m_id.'" />';
     $html .= '</div>';
 
+
+
+
     $html .= '<div>';
-    $html .= '<input type="text" value="'.$player2_name.'" name="pl2_m'.$m_id.'_name" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
-    $html .= '<input type="text" value="'.$pl2_set1.'" name="pl2_m'.$m_id.'_set1" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl2_set2.'" name="pl2_m'.$m_id.'_set2" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl2_set3.'" name="pl2_m'.$m_id.'_set3" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl2_set4.'" name="pl2_m'.$m_id.'_set4" class="set_score" />';
-    $html .= '<input type="text" value="'.$pl2_set5.'" name="pl2_m'.$m_id.'_set5" class="set_score" />';
+
+    $html .= '<select name="pl2_m'.$m_id.'_name" id="pl2_m'.$m_id.'_name" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
+    foreach( $players as $k => $player ){
+        $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl2_id ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
+    }
+    $html .= '</select>';
+
+    //$html .= '<input type="text" value="'.$player2_name.'" name="pl2_m'.$m_id.'_name" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
+    if( !empty( trim( $player2_name_bis ) ) ){
+        //$html .= '<input type="text" value="'.$player2_name_bis.'" name="pl2_m'.$m_id.'_name_bis" class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
+
+        $html .= '<select name="pl2_m'.$m_id.'_name_bis" id="pl2_m'.$m_id.'_name_bis"  class="player_name '.( $winner == $pl2_id ? 'winner' : '' ).' '.( $winner == $pl1_id ? 'loser' : '' ).'" />';
+        foreach( $players as $k => $player ){
+            $html .= '<option value="'.$player->player_firstname.' '.$player->player_lastname.'" '.( $k == $pl2_id_bis ? 'selected="selected"' : '' ).'>'.$player->player_firstname.' '.$player->player_lastname.'</option>';
+        }
+        $html .= '</select>';
+    }
+    $html .= '<input type="number" value="'.$pl2_set1.'" name="pl2_m'.$m_id.'_set1" class="set_score" min="0" max="'.$_SESSION['current_tournament']['max_points_set'].'" />';
+    $html .= '<input type="number" value="'.$pl2_set2.'" name="pl2_m'.$m_id.'_set2" class="set_score" min="0" max="'.$_SESSION['current_tournament']['max_points_set'].'" />';
+    $html .= '<input type="number" value="'.$pl2_set3.'" name="pl2_m'.$m_id.'_set3" class="set_score" min="0" max="'.$_SESSION['current_tournament']['max_points_set'].'" />';
+    $html .= '<input type="number" value="'.$pl2_set4.'" name="pl2_m'.$m_id.'_set4" class="set_score" '.( $_SESSION['current_tournament']['turnier_nb_sets'] < 3 ? 'disabled="disabled"' : '' ).'/>';
+    $html .= '<input type="number" value="'.$pl2_set5.'" name="pl2_m'.$m_id.'_set5" class="set_score" '.( $_SESSION['current_tournament']['turnier_nb_sets'] < 3 ? 'disabled="disabled"' : '' ).'/>';
     $html .= '<input type="submit" value="Sieger" class="match_winner" data="'.$pl2_id.'" data_m_id="'.$m_id.'" />';
     $html .= '</div>';
 
