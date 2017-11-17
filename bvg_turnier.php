@@ -1,4 +1,5 @@
 <?php
+
 /*
 Plugin Name: BVG Turnier
 Plugin URI: http://etalkers.org
@@ -25,6 +26,10 @@ class Bvg_turnier
 {
     function __construct(){
         add_action( 'admin_menu', array( $this, 'bvg_turnier_menu' ) );
+
+        add_action( 'wp_ajax_change_players_match', array( $this, 'change_players_match' ) );
+
+        add_shortcode( 'bvg_turnier_table', array( $this, 'bvg_turnier_table_shortcode' ) );
     }
 
     function bvg_turnier_menu(){
@@ -59,6 +64,24 @@ class Bvg_turnier
 
 
         return true;
+    }
+
+    function change_players_match(){
+        include plugin_dir_path(__FILE__).'admin/action/change_player_match.php';
+        //var_dump( $_POST );
+        echo $html_ajax;
+        wp_die();
+    }
+
+    // Add Shortcode
+    function bvg_turnier_table_shortcode( $atts ) {
+
+        wp_enqueue_style( 'bvg_turnier_admin_style', plugin_dir_url(__FILE__).'bvg_turnier.css');
+
+        $html_shortcode = '';
+        include plugin_dir_path( __FILE__ ).'shortcode_table.php';
+
+        return $html_shortcode;
     }
 
 }

@@ -9,8 +9,8 @@
 //var_dump( $all_players );
 
 /* Players */
-$html .= '<div class="admin_block_label">Spieler</div>';
-$html .= '<div class="admin_block" id="block_add_players">';
+//$html .= '<div class="admin_block_label">Spieler</div>';
+$html .= '<div class="admin_block nav_player" id="block_add_players">';
 
 $html .= '<form method="post">';
 $html .= '<input type="hidden" name="form_action" value="add_existing_players" />';

@@ -9,8 +9,8 @@
 
 /* Table */
 
-$html .= '<div class="admin_block_label">Tabelle</div>';
-$html .= '<div class="admin_block" id="block_table">';
+//$html .= '<div class="admin_block_label">Tabelle</div>';
+$html .= '<div class="admin_block nav_table" id="block_table">';
 $html .= '<form method="post">';
 $html .= '<input type="hidden" name="form_action" value="next_round" />';
 
@@ -85,7 +85,9 @@ foreach( $players as $k => $player ){
 }
 $html .= '</ul>';
 
-$html .= '<input type="submit" value="Nächster Round" class="next_round" />';
+if( $admin_view ){
+    $html .= '<input type="submit" value="Nächster Round" class="next_round" />';
+}
 
 $html .= '</form>';
 $html .= '</div>';

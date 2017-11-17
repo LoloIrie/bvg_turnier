@@ -8,8 +8,8 @@
 
 
 /* Tournament */
-$html .= '<div class="admin_block_label">Turnier</div>';
-$html .= '<div class="admin_block" id="block_tournament_select">';
+//$html .= '<div class="admin_block_label">Turnier</div>';
+$html .= '<div class="admin_block nav_tournament" id="block_tournament_select">';
 $html .= '<form method="post">';
 $html .= '<input type="hidden" name="form_action" value="tournament_select" />';
 $html .= '<input type="hidden" name="turnier_select_id" value="'.$_SESSION['t_id'].'" />';

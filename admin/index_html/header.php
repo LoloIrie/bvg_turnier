@@ -25,7 +25,25 @@ $html .= '<h3>'.$_SESSION['t_name'].' (ID:'.$_SESSION['current_tournament']['id'
 $html .= '<h4>Gewinnsätze: '.$_SESSION['current_tournament']['nb_sets'].' Punkte pro Satz: '.$_SESSION['current_tournament']['points_set'].' Max. Punkte pro Satz: '.$_SESSION['current_tournament']['max_points_set'].'</h4>';
 
 
+$html .= '<nav id="main_nav">';
+    $html .= '<ul>';
+        $html .= '<li class="nav_item" id="nav_tournament">';
+        $html .= 'Turnier';
+        $html .= '</li>';
 
+        $html .= '<li class="nav_item" id="nav_player">';
+        $html .= 'Players';
+        $html .= '</li>';
+
+        $html .= '<li class="nav_item" id="nav_table">';
+        $html .= 'Tabelle';
+        $html .= '</li>';
+
+        $html .= '<li class="nav_item" id="nav_match">';
+        $html .= 'Matches';
+        $html .= '</li>';
+    $html .= '</ul>';
+$html .= '</nav>';
 /*
 echo '<pre>';
 var_dump( $players );

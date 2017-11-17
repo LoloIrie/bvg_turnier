@@ -10,7 +10,8 @@
 $data = array(
     'firstname' => $_POST['firstname'],
     'lastname' => $_POST['lastname'],
-    'player_level' => $_POST['schweizer_system_punkte']
+    'player_level' => $_POST['schweizer_system_punkte'],
+    'status' => 1
 );
 $wpdb->insert( $wpdb->prefix . 'bvg_players', $data );
 

@@ -1,8 +1,17 @@
 console.log( 'bvg_turnier_admin.js included...' );
 
+/*
 jQuery('.admin_block_label').on( 'click', function(){
     jQuery('.admin_block').hide();
     jQuery( this ).next().slideDown();
+});
+*/
+
+jQuery('.nav_item').on( 'click', function(){
+    id_nav = jQuery( this ).attr( 'id' );
+    id_block = '.admin_block.' + id_nav;
+    jQuery('.admin_block').hide();
+    jQuery( id_block ).slideDown( 'slow' );
 });
 
 jQuery('.match_winner').on( 'click', function(){
@@ -24,7 +33,34 @@ jQuery('#spieler_select').on( 'change', function(){
 
 jQuery( 'select.player_name' ).on('change', function() {
         if (confirm('Wollen Sie wirklich die Spieleinstellung ändern ? ')) {
-            alert('Spiel geändert !');
+            the_form = jQuery(this).closest('form');
+            pl_select = the_form.find( '.player_name' );
+            players_id = [];
+            pl_select.each(function(i){
+                players_id[i] = jQuery( this ).val();
+            });
+
+            match_id = the_form.find( '.match_id' ).val();
+            console.log( players_id );
+            console.log( match_id );
+            var data = {
+                action: 'change_players_match',
+                match_id: match_id,
+                players_id: players_id
+            };
+
+            jQuery.ajax({
+                type: "POST",
+                data : data,
+                async: true,
+                cache: false,
+                url: ajaxurl,
+                success: function(data) {
+                    console.log(data);
+
+                }
+            });
+
         }
     }
 );
