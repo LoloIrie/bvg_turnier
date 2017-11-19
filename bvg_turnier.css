@@ -1,13 +1,5 @@
-nav{
-    width: 100%;
-    display: flex;
-}
-nav li{
-    float: left;
-    margin-right: 16px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
+html, body{
+    overflow: auto;
 }
 hr{
     clear: both;
@@ -79,13 +71,13 @@ select.player_name, input.player_name{
     background-color: #fffa90;
     color: #000;
 }
-select.player_name.loser, input.player_name.loser{
-    background-color: #c00;
+select.player_name.loser, input.player_name.loser, div.loser{
+    border: 2px dashed transparent;
     color: #fff;
 }
-select.player_name.winner, input.player_name.winner{
-    background-color: #adff2f;
-    color: #000;
+select.player_name.winner, input.player_name.winner, div.winner{
+    border: 2px dashed #adff2f;
+    border-radius: 8px;
 }
 
 .radio_block label{
@@ -109,6 +101,57 @@ select.player_name.winner, input.player_name.winner{
 }
 
 .admin_block li:hover{
+    background-color: rgba( 255, 255, 255, 0.2);
     border: 1px solid #ccc;
     border-radius: 8px;
+}
+.round_select_div{
+    height: 30px;
+    margin-bottom: 15px;
+}
+.match_row{
+    border-bottom: 2px solid #fff;
+    margin-bottom: 30px;
+}
+.match_round_header{
+    font-weight: bold;
+}
+.match_row1, .match_row2{
+    display: block;
+    clear: both;
+}
+.match_row2{
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.match_pl1_name, .match_pl1_score, .match_pl2_name, .match_pl2_score{
+    display: inline;
+    float: left;
+    margin-left: 15px;
+}
+.match_pl1_name, .match_pl2_name{
+    min-width: 200px;
+    padding-left: 5px;
+}
+.match_pl1_name, .match_pl2_name{
+    min-width: 400px;
+}
+.match_pl1_score, .match_pl2_score{
+    min-width: 150px;
+    max-width: 300px;
+}
+.set_score{
+    display: inline-block;
+    width: 30px;
+    margin-right: 8px;
+    padding-left: 4px;
+    border-left: 0;
+    text-align: center;
+}
+.set_score ~ .set_score {
+    border-left: 1px dashed #ddd;
+}
+#round_select{
+    float: none;
 }

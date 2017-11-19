@@ -30,6 +30,7 @@ class Bvg_turnier
         add_action( 'wp_ajax_change_players_match', array( $this, 'change_players_match' ) );
 
         add_shortcode( 'bvg_turnier_table', array( $this, 'bvg_turnier_table_shortcode' ) );
+        add_shortcode( 'bvg_turnier_matches', array( $this, 'bvg_turnier_matches_shortcode' ) );
     }
 
     function bvg_turnier_menu(){
@@ -73,7 +74,7 @@ class Bvg_turnier
         wp_die();
     }
 
-    // Add Shortcode
+    // Add Shortcodes
     function bvg_turnier_table_shortcode( $atts ) {
 
         wp_enqueue_style( 'bvg_turnier_admin_style', plugin_dir_url(__FILE__).'bvg_turnier.css');
@@ -84,6 +85,16 @@ class Bvg_turnier
         return $html_shortcode;
     }
 
+    function bvg_turnier_matches_shortcode( $atts ) {
+
+        wp_enqueue_style( 'bvg_turnier_admin_style', plugin_dir_url(__FILE__).'bvg_turnier.css');
+        wp_enqueue_script( 'bvg_turnier', plugins_url( 'bvg_turnier.js', __FILE__ ) );
+
+        $html_shortcode = '';
+        include plugin_dir_path( __FILE__ ).'shortcode_matches.php';
+
+        return $html_shortcode;
+    }
 }
 
 new Bvg_turnier();

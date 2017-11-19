@@ -108,23 +108,36 @@ function db_get_matches( $tournament_id = false, $round = false ){
     }
 
     if( !$round ){
-        $round = $_SESSION['round'];
+        $query = "SELECT
+        *
+
+        FROM
+        ".$wpdb->prefix."bvg_matches
+
+        WHERE
+        tournament_id = ".$tournament_id."
+
+        ORDER BY
+        round, id ASC
+        ";
+    }else{
+        $query = "SELECT
+        *
+
+        FROM
+        ".$wpdb->prefix."bvg_matches
+
+        WHERE
+        tournament_id = ".$tournament_id."
+        AND
+        round = ".$round."
+
+        ORDER BY
+        id ASC
+        ";
     }
 
-    $query = "SELECT
-    *
-    
-    FROM
-    ".$wpdb->prefix."bvg_matches
-    
-    WHERE
-    tournament_id = ".$tournament_id."
-    AND
-    round = ".$round."
-    
-    ORDER BY
-    id ASC
-    ";
+
     $matches = $wpdb->get_results( $query );
 
 return $matches;

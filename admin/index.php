@@ -31,7 +31,7 @@ include plugin_dir_path(__FILE__). 'db_get_content.php';
 $tournaments = db_get_tournaments();
 $all_players = db_get_all_players();
 $players = db_get_players();
-$matches = db_get_matches();
+$matches = db_get_matches( $_SESSION['t_id'], $_SESSION['round'] );
 
 
 /* Generate matches if required */

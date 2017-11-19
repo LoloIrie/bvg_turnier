@@ -13,7 +13,7 @@ $html_shortcode = '';
 $atts = shortcode_atts(
     array(
         't_id' => '1',
-        'view' => 'full',
+        'round' => false,
     ),
     $atts
 );
@@ -21,15 +21,20 @@ $atts = shortcode_atts(
 include_once plugin_dir_path(__FILE__). 'admin/db_get_content.php';
 $tournament = db_get_tournaments( $atts['t_id'] );
 $players = db_get_players( $atts['t_id'] );
+$round = $atts[ 'round' ];
+if( $round == 0){
+    $round = false;
+}
+$matches = db_get_matches( $atts['t_id'], $round );
 
-
-$html_shortcode .= '<h3>'.$tournament[0]->name.' / ' .'Round: '.$tournament[0]->round.'</h3>';
-$html_shortcode .= '<h4>Gewinnsätze: '.$tournament[0]->nb_sets.' Punkte pro Satz: '.$tournament[0]->points_set.' Max. Punkte pro Satz: '.$tournament[0]->max_points_set.'</h4>';
+$html_shortcode .= '<h3>Matches '.$tournament[0]->name.' / ' .'Round: '.( $round ? $round.' / ' : '' ).$tournament[0]->round.'</h3>';
 
 
 
 $html = '';
 $admin_view = false;
-include plugin_dir_path(__FILE__). 'admin/index_html/tournament_table.php';
+define( 'ROUND', $round );
+define( 'ROUND_MAX', $tournament[0]->round );
+include plugin_dir_path(__FILE__). 'admin/index_html/matches_view.php';
 
 $html_shortcode .= $html;

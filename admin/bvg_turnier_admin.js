@@ -38,6 +38,8 @@ jQuery( 'select.player_name' ).on('change', function() {
             players_id = [];
             pl_select.each(function(i){
                 players_id[i] = jQuery( this ).val();
+                jSelector = 'input[name="'+jQuery( this).attr( 'data_pl_id' )+'"]';
+                the_form.find( jSelector).val( jQuery( this ).val() );
             });
 
             match_id = the_form.find( '.match_id' ).val();

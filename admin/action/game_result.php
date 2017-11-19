@@ -268,6 +268,6 @@ if( !is_numeric( $_POST['match_id'] ) ){
 
 
     //$wpdb->print_error();
-    $bvg_admin_msg .= 'Match aktualisiert...';
+    $bvg_admin_msg .= 'Match aktualisiert...'.print_r( $_POST , 1 );
 }
 
