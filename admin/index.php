@@ -43,7 +43,6 @@ if( empty($matches) ){
 
 
 /* HTML */
-$admin_view = true;
 $html = '';
 
 /* Header */

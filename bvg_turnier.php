@@ -80,7 +80,7 @@ class Bvg_turnier
         wp_enqueue_style( 'bvg_turnier_admin_style', plugin_dir_url(__FILE__).'bvg_turnier.css');
 
         $html_shortcode = '';
-        include plugin_dir_path( __FILE__ ).'shortcode_table.php';
+        include plugin_dir_path( __FILE__ ).'shortcodes/shortcode_table.php';
 
         return $html_shortcode;
     }
@@ -91,7 +91,7 @@ class Bvg_turnier
         wp_enqueue_script( 'bvg_turnier', plugins_url( 'bvg_turnier.js', __FILE__ ) );
 
         $html_shortcode = '';
-        include plugin_dir_path( __FILE__ ).'shortcode_matches.php';
+        include plugin_dir_path( __FILE__ ).'shortcodes/shortcode_matches.php';
 
         return $html_shortcode;
     }

@@ -18,7 +18,7 @@ $atts = shortcode_atts(
     $atts
 );
 
-include_once plugin_dir_path(__FILE__). 'admin/db_get_content.php';
+include_once plugin_dir_path(__FILE__). '../admin/db_get_content.php';
 $tournament = db_get_tournaments( $atts['t_id'] );
 $players = db_get_players( $atts['t_id'] );
 $round = $atts[ 'round' ];
@@ -32,9 +32,8 @@ $html_shortcode .= '<h3>Matches '.$tournament[0]->name.' / ' .'Round: '.( $round
 
 
 $html = '';
-$admin_view = false;
 define( 'ROUND', $round );
 define( 'ROUND_MAX', $tournament[0]->round );
-include plugin_dir_path(__FILE__). 'admin/index_html/matches_view.php';
+include plugin_dir_path(__FILE__). 'sc_html/matches_view.php';
 
 $html_shortcode .= $html;

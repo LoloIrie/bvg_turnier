@@ -42,10 +42,17 @@ $html .= "Spielpunkte";
 $html .= "</span>";
 $html .= '</li>';
 
+if( !is_numeric($table_view) || $table_view == 0 ){
+    $table_view = 10000;
+}
+$nb_row = 0;
 foreach( $players as $k => $player ){
+    $nb_row++;
+    if( $nb_row > $table_view ){
+        break;
+    }
 
-
-    $html .= '<li class="table_row">';
+    $html .= '<li class="table_row">'.$nb_row.'. ';
     $html .= '<span class="pl_name">';
     $html .= $player->player_firstname.' '.$player->player_lastname;
     $html .= "</span>";
@@ -85,20 +92,7 @@ foreach( $players as $k => $player ){
 }
 $html .= '</ul>';
 
-$html .= '<input type="submit" value="Nächster Round" class="next_round" style="float: none;" />';
-
-$html .= '<h1 class="topspace">Shortcodes</h1>';
-$html .= '<div class="shortcode_bvg"><h2>Tabelle (komplett)</h2><input type="text" class="wp_style" value="[bvg_turnier_table t_id='.$_SESSION['t_id'].' view=full]" /></div>';
-$html .= '<div class="shortcode_bvg"><h2>Tabelle (nur die 5 erste)</h2><input type="text" class="wp_style" value="[bvg_turnier_table t_id='.$_SESSION['t_id'].' view=5]" /></div>';
-
-
-
 
 $html .= '</form>';
 $html .= '</div>';
 
-$html .= '<script>
-jQuery(\'.wp_style\').on(\'click\', function(){
-    jQuery( this ).select();
-});
-</script>';

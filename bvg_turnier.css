@@ -154,4 +154,10 @@ select.player_name.winner, input.player_name.winner, div.winner{
 }
 #round_select{
     float: none;
+    background-color: transparent;
+    border: 0;
+    color: #fff;
+}
+#round_select option{
+    background-color: #115d9e;
 }
